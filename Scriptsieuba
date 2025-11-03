@@ -1,0 +1,40 @@
+-- CONFIG
+local imageId = "rbxassetid://9705553"
+local soundId = "rbxassetid://2602546138"
+local flashes = 50
+
+-- GUI
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.IgnoreGuiInset = true
+gui.ResetOnSpawn = false
+
+local img = Instance.new("ImageLabel", gui)
+img.Size = UDim2.new(1,0,1,0)
+img.Position = UDim2.new(0,0,0,0)
+img.BackgroundTransparency = 1
+img.Image = imageId
+img.Visible = false
+
+-- SOUND
+local sound = Instance.new("Sound", player:WaitForChild("PlayerGui"))
+sound.SoundId = soundId
+sound.Volume = 1
+
+-- FUNCTION
+local function jumpScare()
+	sound:Play()
+
+	for i = 1, flashes do
+		img.Visible = true
+		task.wait(0.05)
+		img.Visible = false
+		task.wait(0.05)
+	end
+
+	-- Kick người chơi
+	game.Players.LocalPlayer:Kick("jumpcasse by:x.meo72")
+end
+
+-- GỌI HÀM TẠO HIỆU ỨNG
+jumpScare()
