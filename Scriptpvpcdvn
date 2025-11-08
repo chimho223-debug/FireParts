@@ -1,0 +1,268 @@
+--=----------------------------=--
+--  LOCAL PLAYER FULL MENU SCRIPT
+--=----------------------------=--
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+-- GUI tạo sẵn
+local ScreenGui = Instance.new("ScreenGui", LocalPlayer:WaitForChild("PlayerGui"))
+ScreenGui.Name = "8hcariGUI"
+
+--===== MENU CHÍNH =====--
+local Main = Instance.new("Frame", ScreenGui)
+Main.Size = UDim2.new(0, 300, 0, 260)
+Main.Position = UDim2.new(0.35, 0, 0.35, 0)
+Main.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Main.BackgroundTransparency = 0
+Main.BorderSizePixel = 0
+Main.Active = true
+Main.Draggable = true
+Main.Visible = true
+Main.Name = "MainMenu"
+
+local UICorner = Instance.new("UICorner", Main)
+UICorner.CornerRadius = UDim.new(0, 14)
+
+--===== TIÊU ĐỀ =====--
+local Title = Instance.new("TextLabel", Main)
+Title.Size = UDim2.new(1, -40, 0, 30)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.Text = "8hcari👍"
+Title.TextColor3 = Color3.new(1,1,1)
+Title.BackgroundTransparency = 1
+Title.TextSize = 20
+Title.Font = Enum.Font.GothamBold
+
+--===== NÚT X =====--
+local CloseBtn = Instance.new("TextButton", Main)
+CloseBtn.Text = "X"
+CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+CloseBtn.Position = UDim2.new(1, -35, 0, 0)
+CloseBtn.BackgroundTransparency = 0.3
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+CloseBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0,6)
+
+--===== NÚT THU NHỎ (-) =====--
+local MinimBtn = Instance.new("TextButton", Main)
+MinimBtn.Text = "-"
+MinimBtn.Size = UDim2.new(0, 30, 0, 30)
+MinimBtn.Position = UDim2.new(1, -70, 0, 0)
+MinimBtn.BackgroundTransparency = 0.2
+MinimBtn.BackgroundColor3 = Color3.fromRGB(70,70,70)
+MinimBtn.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", MinimBtn).CornerRadius = UDim.new(0,6)
+
+--===== CỤC THU NHỎ =====--
+local MiniIcon = Instance.new("ImageButton", ScreenGui)
+MiniIcon.Image = "rbxassetid://15067980098"
+MiniIcon.Size = UDim2.new(0, 60, 0, 60)
+MiniIcon.BackgroundTransparency = 0.3
+MiniIcon.BackgroundColor3 = Color3.fromRGB(40,40,40)
+Instance.new("UICorner", MiniIcon)
+MiniIcon.Visible = false
+MiniIcon.Active = true
+MiniIcon.Draggable = true
+
+--===== THÔNG BÁO =====--
+local Notify = Instance.new("TextLabel", ScreenGui)
+Notify.Size = UDim2.new(0, 500, 0, 30)
+Notify.Position = UDim2.new(0, 10, 1, -40)
+Notify.BackgroundTransparency = 0.3
+Notify.BackgroundColor3 = Color3.fromRGB(20,20,20)
+Notify.TextColor3 = Color3.new(1,1,1)
+Notify.Text = ""
+Notify.TextSize = 18
+Notify.Visible = false
+Instance.new("UICorner", Notify).CornerRadius = UDim.new(0,10)
+
+local function SendNotify(text)
+	Notify.Text = text
+	Notify.Visible = true
+	task.delay(4, function()
+		Notify.Visible = false
+	end)
+end
+
+--========================================================--
+--                  TỰ ĐỘNG ĐÁNH
+--========================================================--
+
+local autoAttackEnabled = false
+
+local AutoBtn = Instance.new("TextButton", Main)
+AutoBtn.Size = UDim2.new(1, -20, 0, 40)
+AutoBtn.Position = UDim2.new(0, 10, 0, 50)
+AutoBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+AutoBtn.TextColor3 = Color3.new(1,1,1)
+AutoBtn.Text = "tự động đánh : TẮT"
+Instance.new("UICorner", AutoBtn)
+
+AutoBtn.MouseButton1Click:Connect(function()
+	autoAttackEnabled = not autoAttackEnabled
+	AutoBtn.Text = "tự động đánh : " .. (autoAttackEnabled and "BẬT" or "TẮT")
+end)
+
+RunService.RenderStepped:Connect(function()
+	if autoAttackEnabled then
+		local tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
+		if tool and tool:FindFirstChild("Handle") then
+			tool:Activate()
+		end
+	end
+end)
+
+--========================================================--
+--                    HITBOX (SLIDER)
+--========================================================--
+
+local hitboxEnabled = false
+local hitboxSize = 5
+
+local HitboxBtn = Instance.new("TextButton", Main)
+HitboxBtn.Size = UDim2.new(1, -20, 0, 40)
+HitboxBtn.Position = UDim2.new(0, 10, 0, 100)
+HitboxBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+HitboxBtn.TextColor3 = Color3.new(1,1,1)
+HitboxBtn.Text = "hitbox người chơi : TẮT"
+Instance.new("UICorner", HitboxBtn)
+
+-- Slider
+local Slider = Instance.new("TextLabel", Main)
+Slider.Size = UDim2.new(1, -20, 0, 40)
+Slider.Position = UDim2.new(0, 10, 0, 150)
+Slider.BackgroundColor3 = Color3.fromRGB(50,50,50)
+Slider.TextColor3 = Color3.new(1,1,1)
+Slider.Text = "Hitbox Size: 5"
+Instance.new("UICorner", Slider)
+
+local SliderBar = Instance.new("TextButton", Slider)
+SliderBar.Size = UDim2.new(0, 20, 1, 0)
+SliderBar.Position = UDim2.new(0, 0, 0, 0)
+SliderBar.BackgroundColor3 = Color3.fromRGB(255, 140, 0)
+Instance.new("UICorner", SliderBar)
+
+local dragging = false
+
+SliderBar.MouseButton1Down:Connect(function()
+	dragging = true
+end)
+
+UIS.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+RunService.RenderStepped:Connect(function()
+	if dragging then
+		local mouse = UIS:GetMouseLocation().X
+		local minX = Slider.AbsolutePosition.X
+		local maxX = minX + Slider.AbsoluteSize.X
+
+		local clamped = math.clamp(mouse, minX, maxX)
+		local percent = (clamped - minX) / Slider.AbsoluteSize.X
+		local value = math.floor(percent * 100)
+
+		SliderBar.Position = UDim2.new(percent, 0, 0, 0)
+		hitboxSize = value
+		Slider.Text = "Hitbox Size: " .. value
+	end
+end)
+
+HitboxBtn.MouseButton1Click:Connect(function()
+	hitboxEnabled = not hitboxEnabled
+	HitboxBtn.Text = "hitbox người chơi : " .. (hitboxEnabled and "BẬT" or "TẮT")
+end)
+
+-- Kéo hitbox cho người khác
+RunService.RenderStepped:Connect(function()
+	if hitboxEnabled then
+		for _, plr in ipairs(Players:GetPlayers()) do
+			if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+				plr.Character.HumanoidRootPart.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+				plr.Character.HumanoidRootPart.Transparency = 0.7
+				plr.Character.HumanoidRootPart.Color = Color3.fromRGB(255,140,0)
+				plr.Character.HumanoidRootPart.Material = Enum.Material.Neon
+			end
+		end
+	end
+end)
+
+--========================================================--
+--               HIỆN MÁU NGƯỜI GẦN
+--========================================================--
+
+local hpEnabled = true
+
+local HPBtn = Instance.new("TextButton", Main)
+HPBtn.Size = UDim2.new(1, -20, 0, 40)
+HPBtn.Position = UDim2.new(0, 10, 0, 200)
+HPBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+HPBtn.TextColor3 = Color3.new(1,1,1)
+HPBtn.Text = "8hcari👍 : BẬT"
+Instance.new("UICorner", HPBtn)
+
+HPBtn.MouseButton1Click:Connect(function()
+	hpEnabled = not hpEnabled
+	HPBtn.Text = "8hcari👍 : " .. (hpEnabled and "BẬT" or "TẮT")
+end)
+
+RunService.RenderStepped:Connect(function()
+	if hpEnabled then
+		for _, plr in ipairs(Players:GetPlayers()) do
+			if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
+				if not plr.Character.Head:FindFirstChild("BillboardGui") then
+					local bb = Instance.new("BillboardGui", plr.Character.Head)
+					bb.Size = UDim2.new(4,0,1,0)
+					bb.AlwaysOnTop = true
+
+					local bar = Instance.new("Frame", bb)
+					bar.Size = UDim2.new(1,0,0.2,0)
+					bar.Position = UDim2.new(0,0,0.8,0)
+					bar.BackgroundColor3 = Color3.fromRGB(255,0,0)
+					Instance.new("UICorner", bar)
+
+					bar.Name = "HPBar"
+				end
+
+				local hp = plr.Character:FindFirstChild("Humanoid").Health
+				local max = plr.Character:FindFirstChild("Humanoid").MaxHealth
+				local bar = plr.Character.Head.BillboardGui:FindFirstChild("HPBar")
+
+				bar.Size = UDim2.new(hp/max, 0, 0.2, 0)
+			end
+		end
+	end
+end)
+
+--========================================================--
+--                 NÚT X – TẮT MENU
+--========================================================--
+
+CloseBtn.MouseButton1Click:Connect(function()
+	Main.Visible = false
+	MiniIcon.Visible = false
+	autoAttackEnabled = false
+	hitboxEnabled = false
+	hpEnabled = false
+	SendNotify("đã biến mất menu, và tắt hết chức năng")
+end)
+
+--========================================================--
+--                NÚT – THU NHỎ MENU
+--========================================================--
+
+MinimBtn.MouseButton1Click:Connect(function()
+	Main.Visible = false
+	MiniIcon.Visible = true
+	SendNotify("menu đã hoá thành cục bo góc hãy ấn vào cục bo góc để bật lại")
+end)
+
+MiniIcon.MouseButton1Click:Connect(function()
+	Main.Visible = true
+	MiniIcon.Visible = false
+end)
